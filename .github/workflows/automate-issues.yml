@@ -1,0 +1,120 @@
+name: Automate Issues
+
+on:
+  issues:
+    types:
+      - opened
+      - labeled
+      # - assigned
+
+jobs:
+  triage-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # https://github.com/crazy-max/ghaction-github-labeler
+      # Manage labels as code
+      - name: Run Labeler
+        if: github.event.action == 'opened'
+        uses: shaunaa126/ghaction-github-labeler@v3.1.1
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          yaml-file: .github/ISSUE_TEMPLATE/labels.yml
+          skip-delete: false
+          dry-run: false
+          exclude: |
+            help*
+            *issue
+      
+      # https://github.com/damccorm/tag-ur-it
+      # Automatically tag issues with labels and assignees based on issue rules
+      - name: Run Tagging Rules
+        if: github.event.action == 'opened'
+        uses: shaunaa126/tag-ur-it@master
+        with:
+          repo-token: "${{ secrets.GH_TOKEN }}"
+          configuration-path: ".github/ISSUE_TEMPLATE/issue-rules.yml"
+
+      # https://github.com/peaceiris/actions-label-commenter
+      # Post comment to issue based on label rules
+      # - name: Label Commenter
+      #   uses: peaceiris/actions-label-commenter@v1.9.0
+      #   with:
+      #     github_token: ${{ secrets.GH_TOKEN }}
+      #     config_file: .github/ISSUE_TEMPLATE/label-commenter-config.yml
+
+      # https://github.com/alex-page/github-project-automation-plus
+      # Use issue webhooks to automate project cards
+      - name: Adding Epic Issues to TnT Priority Board
+        if: contains(github.event.issue.labels.*.name, 'Epic')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: TnT-Priority-Board
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Triage Project Cards for DM
+        if: contains(github.event.issue.labels.*.name, 'DM')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: DM
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+      
+      - name: Triage Project Cards for DBaaS
+        if: contains(github.event.issue.labels.*.name, 'DBaaS')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: DBaaS
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Triage Project Cards for CaaS
+        if: contains(github.event.issue.labels.*.name, 'CaaS')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: CaaS
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Triage Project Cards for GaaS
+        if: contains(github.event.issue.labels.*.name, 'GaaS')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: GaaS
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Triage Project Cards for OB
+        if: contains(github.event.issue.labels.*.name, 'OB')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: OB
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Triage Project Cards for DTE
+        if: contains(github.event.issue.labels.*.name, 'DTE')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: DTE
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Triage Project Cards for Runway
+        if: contains(github.event.issue.labels.*.name, 'Runway')
+        uses: shaunaa126/github-project-automation-plus@v0.5.1
+        with:
+          project: Runway
+          column: To do
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      # - name: Triage Project Cards for In Progress
+      #   if: github.event.action == 'assigned' && !contains(github.event.issue.labels.*.name, 'needs review')
+      #   uses: shaunaa126/github-project-automation-plus@v0.5.1
+      #   with:
+      #     project: Org-Backlog
+      #     column: In Progress
+      #     repo-token: ${{ secrets.GH_TOKEN }}

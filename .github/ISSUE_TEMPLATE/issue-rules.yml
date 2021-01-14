@@ -1,0 +1,40 @@
+# list of primary rules
+rules:
+- valueFor: '*Description*'
+  contains: 
+  addLabels: ['invalid']
+- valueFor: '*Details*'
+  contains: 
+  addLabels: ['invalid']
+- valueFor: '*Product*'
+  contains: 
+  addLabels: ['invalid']
+
+# List of secondary rules to run if no matches detected in primary rules
+# nomatches:
+- contains: 'DM' # Checks the entire issue for a substring match. 
+  addLabels: ['DM']
+  # assign: ['shaunaa126']
+- contains: 'DBaaS' # Checks the entire issue for a substring match. 
+  addLabels: ['DBaaS']
+  # assign: ['stingaa']
+- contains: 'CaaS' # Checks the entire issue for a substring match.
+  addLabels: ['CaaS']
+  # assign: ['echojiang']
+- contains: 'GaaS' # Checks the entire issue for a substring match. 
+  addLabels: ['GaaS']
+  # assign: ['shaunaa126']
+- contains: 'OB' # Checks the entire issue for a substring match. 
+  addLabels: ['OB']
+  # assign: ['stingaa']
+- contains: 'DTE' # Checks the entire issue for a substring match.
+  addLabels: ['DTE']
+  # assign: ['echojiang']
+- contains: 'Runway' # Checks the entire issue for a substring match.
+  addLabels: ['Runway']
+  # assign: ['echojiang']
+
+# List that always runs after rules and nomatches. Look for missing sets of tags here.
+# tags:
+# - noneIn: ['epic', 'enhancement', 'question'] # If no bug, enhancement, or question labels are added, label with 'needs review'
+#   addLabels: ['needs review']

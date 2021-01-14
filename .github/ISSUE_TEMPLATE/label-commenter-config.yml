@@ -1,0 +1,22 @@
+labels:
+  - name: invalid
+    labeled:
+      issue:
+        body: Please answer the questionaire when creating the issue.
+        action: close
+  - name: approved
+    labeled:
+      issue:
+        body: The work item is approved and will be prioritized in the backlog.
+  - name: rejected
+    labeled:
+      issue:
+        body: |
+          The work item is rejected and will not be added to the backlog, please reach out to backlog team for more details.
+          DL_someteam@aa.com
+        action: close 
+  - name: completed
+    labeled:
+      issue:
+        body: The work item has been completed.
+        action: close
